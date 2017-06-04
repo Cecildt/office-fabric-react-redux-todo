@@ -1,19 +1,14 @@
 import * as React from "react";
 import * as classNames from "classnames";
 import { PrimaryButton, DefaultButton } from "office-ui-fabric-react/lib/Button";
+import { CommandBar } from "office-ui-fabric-react/lib/CommandBar";
+import { IContextualMenuItem } from "office-ui-fabric-react/lib/ContextualMenu";
 
 import {
   SHOW_ALL,
   SHOW_COMPLETED,
   SHOW_ACTIVE
 } from "../constants/TodoFilters";
-
-const FILTER_TITLES = {
-  [SHOW_ALL]: "All",
-  [SHOW_ACTIVE]: "Active",
-  [SHOW_COMPLETED]: "Completed"
-};
-
 
 interface IFooterProps {
   completedCount: number;
@@ -29,47 +24,61 @@ class Footer extends React.Component<IFooterProps, void> {
     const itemWord = activeCount === 1 ? "item" : "items";
 
     return (
-      <span className="ms-font-s">
-        <strong>{activeCount || "No"}</strong> {itemWord} left
-      </span>
+      <div className="itemCountDisplay">
+        <span className="ms-font-s">
+          <strong>{activeCount || "No"}</strong> {itemWord} left
+        </span>
+      </div>
     );
-  }
-
-  renderFilterLink(filter) {
-    const title: string = FILTER_TITLES[filter];
-    const { filter: selectedFilter, onShow } = this.props;
-
-    return (
-      <DefaultButton className={classNames({ selected: filter === selectedFilter })}
-         style={{ cursor: "pointer" }}
-         onClick={() => onShow(filter)}
-         text={title} />
-    );
-  }
-
-  renderClearButton() {
-    const { completedCount, onClearCompleted } = this.props;
-    if (completedCount > 0) {
-      return (
-        <PrimaryButton
-          onClick={() => onClearCompleted()}
-          text="Clear completed" />
-      );
-    }
   }
 
   render(): JSX.Element {
+
+    const { completedCount, onClearCompleted, onShow } = this.props;
+    const items: IContextualMenuItem[] = [
+      {
+          key: "allTodos",
+          iconProps: {
+            iconName: "DietPlanNotebook"
+          },
+          name: "Show All",
+          onClick: () => onShow(SHOW_ALL)
+      },
+      {
+          key: "activeTodos",
+          iconProps: {
+            iconName: "Play"
+          },
+          name: "Hide Completed",
+          onClick: () => onShow(SHOW_ACTIVE)
+      },
+      {
+          key: "completeTodos",
+          iconProps: {
+            iconName: "CheckMark"
+          },
+          name: "Show Completed",
+          onClick: () => onShow(SHOW_COMPLETED)
+      }];
+
+      if (completedCount > 0) {
+        items.push({
+          key: "clearCompleted",
+          iconProps: {
+            iconName: "Delete"
+          },
+          name: "Clear completed",
+          onClick: () => onClearCompleted()
+        });
+      }
+
     return (
       <footer className="footer">
+        <CommandBar
+          isSearchBoxVisible={ false }
+          items={ items }
+          farItems={ [] } />
         {this.renderTodoCount()}
-        <ul className="filters">
-          {[SHOW_ALL, SHOW_ACTIVE, SHOW_COMPLETED].map(filter =>
-            <li key={filter}>
-              {this.renderFilterLink(filter)}
-            </li>
-          )}
-        </ul>
-        {this.renderClearButton()}
       </footer>
     );
   }

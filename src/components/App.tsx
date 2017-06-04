@@ -27,7 +27,8 @@ class App extends React.Component<IAppProps, void> {
       <div className="ms-Grid ms-bgColor-neutralTertiaryAlt">
         <div className="ms-Grid-row">
             <div className="ms-Grid-col ms-u-sm6 ms-u-md8 ms-u-lg10">
-              <Header addTodo={(text: string) => dispatch(addTodo(text))} />
+              <Header
+                addTodo={(text: string) => dispatch(addTodo(text))} />
               <MainSection
                   todos={todos}
                   editTodo={(t,s) => dispatch(editTodo(t, s))}

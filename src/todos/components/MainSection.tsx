@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Checkbox } from "office-ui-fabric-react/lib/Checkbox";
 
 import { Todo } from "../model";
 import TodoItem from "./TodoItem";
@@ -15,19 +16,20 @@ const TODO_FILTERS = {
   [SHOW_COMPLETED]: todo => todo.completed
 };
 
-interface MainSectionProps {
+interface IMainSectionProps {
   todos: Todo[];
   clearCompleted: ()=>void;
   completeAll: ()=>void;
   editTodo: (todo:Todo, text:string)=>void;
   completeTodo: (todo:Todo)=>void;
   deleteTodo: (todo:Todo)=>void;
-};
-interface MainSectionState {
-  filter: string;
-};
+}
 
-class MainSection extends React.Component<MainSectionProps, MainSectionState> {
+interface IMainSectionState {
+  filter: string;
+}
+
+class MainSection extends React.Component<IMainSectionProps, IMainSectionState> {
   constructor(props, context) {
     super(props, context);
     this.state = { filter: SHOW_ALL };
@@ -44,19 +46,19 @@ class MainSection extends React.Component<MainSectionProps, MainSectionState> {
     this.setState({ filter });
   }
 
-  renderToggleAll(completedCount) {
+  renderToggleAll(completedCount: number) {
     const { todos, completeAll } = this.props;
     if (todos.length > 0) {
       return (
-        <input className="toggle-all"
-               type="checkbox"
-               checked={completedCount === todos.length}
-               onChange={() => completeAll()} />
+        <Checkbox
+          label="Toggle All"
+          defaultChecked={completedCount === todos.length}
+          onChange={ () => completeAll() } />
       );
     }
   }
 
-  renderFooter(completedCount) {
+  renderFooter(completedCount: number) {
     const { todos } = this.props;
     const { filter } = this.state;
     const activeCount = todos.length - completedCount;

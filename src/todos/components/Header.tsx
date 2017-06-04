@@ -1,10 +1,9 @@
 import * as React from "react";
-
 import TodoTextInput from "./TodoTextInput";
 
 interface IHeaderProps {
   addTodo: (text:string)=> any;
-};
+}
 
 class Header extends React.Component<IHeaderProps, void> {
   handleSave(text: string): void {
