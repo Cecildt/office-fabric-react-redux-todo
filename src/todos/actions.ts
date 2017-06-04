@@ -49,4 +49,4 @@ export {
   completeTodo,
   completeAll,
   clearCompleted
-}
+};

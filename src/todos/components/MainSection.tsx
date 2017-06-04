@@ -42,7 +42,7 @@ class MainSection extends React.Component<IMainSectionProps, IMainSectionState> 
     }
   }
 
-  handleShow(filter) {
+  handleShow(filter: string) {
     this.setState({ filter });
   }
 
